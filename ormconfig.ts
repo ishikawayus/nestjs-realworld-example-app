@@ -1,5 +1,7 @@
 import { ConnectionOptions } from 'typeorm';
 import { SnakeCaseNamingStrategy } from './src/snake-case-naming-strategy';
+import * as entity from './src/entity';
+import * as migration from './src/migration';
 
 const connectionOptions: ConnectionOptions = {
   type: 'mariadb',
@@ -9,8 +11,8 @@ const connectionOptions: ConnectionOptions = {
   password: 'passw0rd',
   database: 'nestjs-realworld-example-app',
   namingStrategy: new SnakeCaseNamingStrategy(),
-  entities: ['src/entity/*.ts'],
-  migrations: ['src/migration/*.ts'],
+  entities: Object.values(entity),
+  migrations: Object.values(migration),
   cli: {
     migrationsDir: 'src/migration',
   },
