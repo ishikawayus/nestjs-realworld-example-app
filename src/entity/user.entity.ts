@@ -21,10 +21,19 @@ export class User extends EntityBase {
   @Column()
   image: string;
 
-  constructor(user: UserProperty) {
-    super();
-    Object.assign(this, user);
+  static forCreateUser(
+    property: Pick<User, 'email' | 'password' | 'username'>,
+  ): User {
+    const user = new User();
+    user.email = property.email;
+    user.password = property.password;
+    user.username = property.username;
+    return user;
+  }
+
+  static forId(property: Pick<User, 'id'>): User {
+    const user = new User();
+    user.id = property.id;
+    return user;
   }
 }
-
-type UserProperty = Pick<User, 'email' | 'password' | 'username'>;
