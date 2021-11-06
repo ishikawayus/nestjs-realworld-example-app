@@ -10,7 +10,7 @@ export class User extends EntityBase {
   email: string;
 
   @Column()
-  token: string;
+  password: string;
 
   @Column()
   username: string;
@@ -20,4 +20,11 @@ export class User extends EntityBase {
 
   @Column()
   image: string;
+
+  constructor(user: UserProperty) {
+    super();
+    Object.assign(this, user);
+  }
 }
+
+type UserProperty = Pick<User, 'email' | 'password' | 'username'>;
