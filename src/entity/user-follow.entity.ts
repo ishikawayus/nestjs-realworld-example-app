@@ -9,4 +9,14 @@ export class UserFollow extends EntityBase {
 
   @ManyToOne(() => User, { primary: true })
   followee: User;
+
+  static forNew(property: {
+    follower: Pick<User, 'id'>;
+    followee: Pick<User, 'id'>;
+  }): UserFollow {
+    const userFollow = new UserFollow();
+    userFollow.follower = User.forId(property.follower);
+    userFollow.followee = User.forId(property.followee);
+    return userFollow;
+  }
 }

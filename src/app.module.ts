@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import connectionOptions from '../ormconfig';
+import { ProfileController } from './controller/profile.controller';
 import { UserController } from './controller/user.controller';
 import { JwtPassportStrategy } from './jwt-passport-strategy';
 import * as repository from './repository';
@@ -18,7 +19,7 @@ import { AuthService } from './service/auth.service';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  controllers: [UserController],
+  controllers: [UserController, ProfileController],
   providers: [AuthService, JwtPassportStrategy],
 })
 export class AppModule {}
