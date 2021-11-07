@@ -21,4 +21,18 @@ export class Article extends EntityBase {
 
   @ManyToOne(() => User)
   author: User;
+
+  static forCreateArticle(
+    property: Pick<Article, 'slug' | 'title' | 'description' | 'body'> & {
+      authorId: User['id'];
+    },
+  ): Article {
+    const article = new Article();
+    article.slug = property.slug;
+    article.title = property.title;
+    article.description = property.description;
+    article.body = property.body;
+    article.author = User.forId({ id: property.authorId });
+    return article;
+  }
 }
