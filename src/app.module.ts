@@ -7,6 +7,7 @@ import { ArticleController } from './controller/article.controller';
 import { CommentController } from './controller/comment.controller';
 import { FavoriteController } from './controller/favorite.controller';
 import { ProfileController } from './controller/profile.controller';
+import { TagController } from './controller/tag.controller';
 import { UserController } from './controller/user.controller';
 import { JwtPassportStrategy } from './jwt-passport-strategy';
 import * as repository from './repository';
@@ -28,6 +29,7 @@ import { AuthService } from './service/auth.service';
     ArticleController,
     CommentController,
     FavoriteController,
+    TagController,
   ],
   providers: [AuthService, JwtPassportStrategy],
 })
