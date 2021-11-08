@@ -69,6 +69,8 @@ export class ArticleController {
       { skip: offset, take: limit, relations: ['author'] },
     );
     const tagListByArticleId = new Map<number, string[]>();
+    const favoritedByArticleId = new Map<number, boolean>();
+    const favoritesCountByArticleId = new Map<number, number>();
     const followingByAuthorId = new Map<number, boolean>();
     for (const article of articles) {
       const tagList = (
@@ -80,6 +82,17 @@ export class ArticleController {
         .map((articleTag) => articleTag.tag.value)
         .sort();
       tagListByArticleId.set(article.id, tagList);
+      const favorited =
+        userId == null
+          ? false
+          : (await this.articleFavoriteRepository.findOne({
+              where: { article, user: { id: userId } },
+            })) != null;
+      favoritedByArticleId.set(article.author.id, favorited);
+      const favoritesCount = await this.articleFavoriteRepository.count({
+        where: { article },
+      });
+      favoritesCountByArticleId.set(article.author.id, favoritesCount);
       const following =
         userId == null
           ? false
@@ -97,8 +110,8 @@ export class ArticleController {
         tagList: tagListByArticleId.get(article.id) ?? [],
         createdAt: article.createdAt.toISOString(),
         updatedAt: article.updatedAt.toISOString(),
-        favorited: false,
-        favoritesCount: 0,
+        favorited: favoritedByArticleId.get(article.author.id) ?? false,
+        favoritesCount: favoritesCountByArticleId.get(article.author.id) ?? 0,
         author: {
           username: article.author.username,
           bio: article.author.bio || null,
@@ -146,6 +159,8 @@ export class ArticleController {
       .take(limit)
       .getManyAndCount();
     const tagListByArticleId = new Map<number, string[]>();
+    const favoritedByArticleId = new Map<number, boolean>();
+    const favoritesCountByArticleId = new Map<number, number>();
     const followingByAuthorId = new Map<number, boolean>();
     for (const article of articles) {
       const tagList = (
@@ -157,6 +172,17 @@ export class ArticleController {
         .map((articleTag) => articleTag.tag.value)
         .sort();
       tagListByArticleId.set(article.id, tagList);
+      const favorited =
+        userId == null
+          ? false
+          : (await this.articleFavoriteRepository.findOne({
+              where: { article, user: { id: userId } },
+            })) != null;
+      favoritedByArticleId.set(article.author.id, favorited);
+      const favoritesCount = await this.articleFavoriteRepository.count({
+        where: { article },
+      });
+      favoritesCountByArticleId.set(article.author.id, favoritesCount);
       const following =
         userId == null
           ? false
@@ -174,8 +200,8 @@ export class ArticleController {
         tagList: tagListByArticleId.get(article.id) ?? [],
         createdAt: article.createdAt.toISOString(),
         updatedAt: article.updatedAt.toISOString(),
-        favorited: false,
-        favoritesCount: 0,
+        favorited: favoritedByArticleId.get(article.author.id) ?? false,
+        favoritesCount: favoritesCountByArticleId.get(article.author.id) ?? 0,
         author: {
           username: article.author.username,
           bio: article.author.bio || null,
@@ -278,6 +304,15 @@ export class ArticleController {
     )
       .map((articleTag) => articleTag.tag.value)
       .sort();
+    const favorited =
+      userId == null
+        ? false
+        : (await this.articleFavoriteRepository.findOne({
+            where: { article, user: { id: userId } },
+          })) != null;
+    const favoritesCount = await this.articleFavoriteRepository.count({
+      where: { article },
+    });
     const following =
       userId == null
         ? false
@@ -293,8 +328,8 @@ export class ArticleController {
         tagList,
         createdAt: article.createdAt.toISOString(),
         updatedAt: article.updatedAt.toISOString(),
-        favorited: false,
-        favoritesCount: 0,
+        favorited,
+        favoritesCount,
         author: {
           username: article.author.username,
           bio: article.author.bio || null,
@@ -349,6 +384,15 @@ export class ArticleController {
     )
       .map((articleTag) => articleTag.tag.value)
       .sort();
+    const favorited =
+      userId == null
+        ? false
+        : (await this.articleFavoriteRepository.findOne({
+            where: { article, user: { id: userId } },
+          })) != null;
+    const favoritesCount = await this.articleFavoriteRepository.count({
+      where: { article },
+    });
     return {
       article: {
         slug: article.slug,
@@ -358,8 +402,8 @@ export class ArticleController {
         tagList,
         createdAt: article.createdAt.toISOString(),
         updatedAt: article.updatedAt.toISOString(),
-        favorited: false,
-        favoritesCount: 0,
+        favorited,
+        favoritesCount,
         author: {
           username: user.username,
           bio: user.bio || null,

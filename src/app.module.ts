@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import connectionOptions from '../ormconfig';
 import { ArticleController } from './controller/article.controller';
 import { CommentController } from './controller/comment.controller';
+import { FavoriteController } from './controller/favorite.controller';
 import { ProfileController } from './controller/profile.controller';
 import { UserController } from './controller/user.controller';
 import { JwtPassportStrategy } from './jwt-passport-strategy';
@@ -26,6 +27,7 @@ import { AuthService } from './service/auth.service';
     ProfileController,
     ArticleController,
     CommentController,
+    FavoriteController,
   ],
   providers: [AuthService, JwtPassportStrategy],
 })
